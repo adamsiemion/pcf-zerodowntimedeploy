@@ -12,7 +12,7 @@
         <kotlin.version>1.2.51</kotlin.version>
         <main.class>MainKt</main.class>
         <spock.version>1.1-groovy-2.4</spock.version>
-        <groovy.version>3.0.0-alpha-3</groovy.version>
+        <groovy.version>2.5.1</groovy.version>
         <kotlin.spock.runner.version>0.3.1</kotlin.spock.runner.version>
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
@@ -38,17 +38,29 @@
             <artifactId>spock-core</artifactId>
             <version>${spock.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>org.codehaus.groovy</artifactId>
-                    <groupId>groovy-all:jar</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.jodamob.kotlin</groupId>
             <artifactId>kotlin-runner-spock</artifactId>
             <version>${kotlin.spock.runner.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-dep</artifactId>
+            <version>1.8.15</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>2.6</version>
             <scope>test</scope>
         </dependency>
 
@@ -167,15 +179,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-all</artifactId>
-                        <version>${groovy.version}</version>
-                        <type>pom</type>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
