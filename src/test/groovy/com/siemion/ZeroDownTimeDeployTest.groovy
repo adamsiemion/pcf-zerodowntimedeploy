@@ -1,18 +1,21 @@
 package com.siemion
 
 import com.siemion.CloudFoundryClient
+import com.siemion.CloudFoundryClient.AppStatus
 import com.siemion.ZeroDownTimeDeploy
 import de.jodamob.kotlin.testrunner.SpotlinTestRunner
 import org.junit.runner.RunWith
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @RunWith(SpotlinTestRunner)
 class ZeroDownTimeDeployTest extends Specification {
 
-    def "should fail when the old application exists"() {
+    def "should fail when the old application exists"(AppStatus status) {
         given:
+        expect:
         def cloudFoundryClient = Mock(CloudFoundryClient)
-//        cloudFoundryClient.appStatus("app-old") >> CloudFoundryClient.AppStatus.STARTED
+        cloudFoundryClient.appStatus("app-old") >> status
         def zeroDownTimeDeploy = new ZeroDownTimeDeploy(cloudFoundryClient)
 
         when:
@@ -20,5 +23,10 @@ class ZeroDownTimeDeployTest extends Specification {
 
         then:
         thrown RuntimeException
+
+        where:
+        status
+        AppStatus.STARTED
     }
+
 }
