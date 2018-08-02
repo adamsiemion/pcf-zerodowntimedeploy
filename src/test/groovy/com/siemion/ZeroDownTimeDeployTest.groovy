@@ -11,11 +11,10 @@ import spock.lang.Unroll
 @RunWith(SpotlinTestRunner)
 class ZeroDownTimeDeployTest extends Specification {
 
-    def "should fail when the old application exists"(AppStatus status) {
+    def "should fail when the old application exists"() {
         given:
-        expect:
         def cloudFoundryClient = Mock(CloudFoundryClient)
-        cloudFoundryClient.appStatus("app-old") >> status
+        cloudFoundryClient.appStatus("app-old") >> AppStatus.STARTED
         def zeroDownTimeDeploy = new ZeroDownTimeDeploy(cloudFoundryClient)
 
         when:
@@ -23,10 +22,20 @@ class ZeroDownTimeDeployTest extends Specification {
 
         then:
         thrown RuntimeException
+    }
 
-        where:
-        status
-        AppStatus.STARTED
+    def "should rename, push when the old application not exists"() {
+        given:
+        def cloudFoundryClient = Mock(CloudFoundryClient)
+        cloudFoundryClient.appStatus("app-old") >> AppStatus.NOT_FOUND
+        def zeroDownTimeDeploy = new ZeroDownTimeDeploy(cloudFoundryClient)
+
+        when:
+        zeroDownTimeDeploy.deploy("app", "manifest")
+
+        then:
+        1 * cloudFoundryClient.renameApp("app", "app-old")
+        1 * cloudFoundryClient.push("app", "manifest")
     }
 
 }
