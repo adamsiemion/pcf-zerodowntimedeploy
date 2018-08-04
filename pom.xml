@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.siemion.demo</groupId>
-    <artifactId>autopilot-kotlin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.siemion</groupId>
+    <artifactId>pcf-zerodowntimedeploy</artifactId>
+    <version>1.0.0</version>
 
     <properties>
         <kotlin.version>1.2.51</kotlin.version>
