@@ -6,7 +6,7 @@ class ZeroDownTimeDeploy(val cloudFoundryClient: CloudFoundryClient) {
         val oldAppName = "$appName-old"
 
         if (cloudFoundryClient.appStatus(oldAppName) != CloudFoundryClient.AppStatus.NOT_FOUND) {
-            throw RuntimeException("Old application $oldAppName exists")
+            throw IllegalStateException("Old application $oldAppName exists")
         }
         cloudFoundryClient.renameApp(appName, oldAppName)
         cloudFoundryClient.push(appName, manifest)

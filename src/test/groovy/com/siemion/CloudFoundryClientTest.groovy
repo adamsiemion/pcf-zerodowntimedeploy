@@ -4,6 +4,7 @@ import com.siemion.CloudFoundryClient.AppStatus
 import de.jodamob.kotlin.testrunner.SpotlinTestRunner
 import org.junit.runner.RunWith
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @RunWith(SpotlinTestRunner.class)
 class CloudFoundryClientTest extends Specification {
@@ -32,63 +33,31 @@ class CloudFoundryClientTest extends Specification {
         1 * commandExecutor.executeCommand("cf push app -f manifest")
     }
 
-//    def "status should call command executor"() {
-//        given:
-//        commandExecutor.executeCommand(_) >> ["x"]
-//
-//        when:
-//        cloudFoundryClient.appStatus("app")
-//
-//        then:
-//        1 * commandExecutor.executeCommand("cf app app")
-//    }
-
-
-    def "status should return gg"(String output, AppStatus expectedStatus) {
-        given:
-//        commandExecutor.executeCommand(_) >> [output]
-
-        when:
-        def status = cloudFoundryClient.appStatus("app")
-
-        then:
-        status == expectedStatus
+    @Unroll
+    def "status should return status #status"(String commandOutput, AppStatus status) {
+        expect:
+        executeAppStatus(commandOutput) == status
 
         where:
-        expectedStatus | output
-        com.siemion.CloudFoundryClient.AppStatus.NOT_FOUND | "App app not found"
+        commandOutput | status
+        "App app not found" | AppStatus.NOT_FOUND
+        "requested state: started" | AppStatus.STARTED
+        "requested state: starting" | AppStatus.NOT_STARTED
     }
 
-    def "status should return NOT_FOUND"() {
-        given:
-        commandExecutor.executeCommand(_) >> ["App app not found"]
-
-        when:
-        def status = cloudFoundryClient.appStatus("app")
-
-        then:
-        status == CloudFoundryClient.AppStatus.NOT_FOUND
+    def executeAppStatus(String output) {
+        commandExecutor.executeCommand(_) >> [output]
+        return cloudFoundryClient.appStatus("app")
     }
 
-    def "status should return STARTED"() {
+    def "status should fail when unsupported output is returned"() {
         given:
-        commandExecutor.executeCommand(_) >> ["requested state: started"]
+        commandExecutor.executeCommand(_) >> ["unsupported output"]
 
         when:
-        def status = cloudFoundryClient.appStatus("app")
+        cloudFoundryClient.appStatus("app")
 
         then:
-        status == CloudFoundryClient.AppStatus.STARTED
-    }
-
-    def "status should return NOT_STARTED"() {
-        given:
-        commandExecutor.executeCommand(_) >> ["requested state: starting"]
-
-        when:
-        def status = cloudFoundryClient.appStatus("app")
-
-        then:
-        status == CloudFoundryClient.AppStatus.NOT_STARTED
+        thrown IllegalStateException
     }
 }

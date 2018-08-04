@@ -15,9 +15,10 @@ class CommandExecutor(val logger: Logger) {
                 logger.log(line)
             }
         }
+        proc.waitFor()
         val exitValue = proc.exitValue()
         if (exitValue != 0) {
-            throw RuntimeException("Command \"$command\" returned non-zero exit code: $exitValue")
+            throw IllegalStateException("Command \"$command\" returned non-zero exit code: $exitValue")
         }
         logger.log("Command \"$command\" executed successfully")
         return output

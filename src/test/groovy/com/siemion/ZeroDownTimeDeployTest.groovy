@@ -21,7 +21,7 @@ class ZeroDownTimeDeployTest extends Specification {
         zeroDownTimeDeploy.deploy("app", "manifest")
 
         then:
-        thrown RuntimeException
+        thrown IllegalStateException
     }
 
     def "should rename, push when the old application not exists"() {

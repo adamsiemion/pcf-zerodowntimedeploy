@@ -7,7 +7,7 @@ import spock.lang.Specification
 @RunWith(SpotlinTestRunner)
 class CommandExecutorTest extends Specification {
 
-    def "should fail when the old application exists"() {
+    def "should return three lines"() {
         given:
         def file = File.createTempFile("temp",".tmp")
         file.write("line1\nline2\nline3\n")
@@ -20,6 +20,17 @@ class CommandExecutorTest extends Specification {
 
         then:
         output == [ "line1", "line2", "line3" ]
+    }
+
+    def "should fail when command returned non zero exit code"() {
+        given:
+        def commandExecutor = new CommandExecutor(Mock(Logger))
+
+        when:
+        commandExecutor.executeCommand("cat no-such-file")
+
+        then:
+        thrown IllegalStateException
     }
 
 }

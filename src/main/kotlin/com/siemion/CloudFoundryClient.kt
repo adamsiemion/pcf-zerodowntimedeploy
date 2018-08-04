@@ -21,7 +21,7 @@ class CloudFoundryClient(val commandExecutor: CommandExecutor) {
                 return AppStatus.NOT_FOUND
             }
         }
-        throw RuntimeException("Could not parse the output from $command")
+        throw IllegalStateException("Could not parse the output from $command")
     }
 
     fun renameApp(oldAppName: String, newAppName: String) {
