@@ -9,6 +9,7 @@
     <version>1.0.0</version>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.2.51</kotlin.version>
         <main.class>MainKt</main.class>
         <spock.version>1.1-groovy-2.4</spock.version>
@@ -176,6 +177,26 @@
                     <execution>
                         <goals>
                             <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- test coverage -->
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.6.201602180812</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                 </executions>
